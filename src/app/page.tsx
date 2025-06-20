@@ -1,240 +1,249 @@
 "use client"
-import { MapPin, Users, ShoppingCart, Star } from "lucide-react"
+import { useState } from "react"
+import {
+  ArrowRight,
+  Shield,
+  ChevronDown,
+  User,
+  Store,
+} from "lucide-react"
 import SafeImage from "@/components/safe-image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { renderCustomerInterface } from "@/components/interface/customer-interface"
+import { renderVendorInterface } from "@/components/interface/vendor-interface"
+
+type UserRole = "customer" | "vendor"
 
 export default function HomePage() {
-  const featuredVendors = [
-    {
-      id: 1,
-      name: "Chicken Republic",
-      category: "Fast Food",
-      rating: 4.5,
-      deliveryTime: "25-35 min",
-      image: "/placeholder.svg?height=200&width=300",
-      pairableWith: "Cold Stone Creamery",
-    },
-    {
-      id: 2,
-      name: "Domino's Pizza",
-      category: "Pizza",
-      rating: 4.3,
-      deliveryTime: "30-40 min",
-      image: "/placeholder.svg?height=200&width=300",
-      pairableWith: "Yogurt Factory",
-    },
-    {
-      id: 3,
-      name: "Mr. Bigg's",
-      category: "Local Cuisine",
-      rating: 4.2,
-      deliveryTime: "20-30 min",
-      image: "/placeholder.svg?height=200&width=300",
-      pairableWith: "Pie Express",
-    },
-  ]
-
-  const popularCombos = [
-    { combo: "Pizza + Ice Cream", orders: "2.3k orders this week" },
-    { combo: "Jollof + Smoothie", orders: "1.8k orders this week" },
-    { combo: "Burger + Dessert", orders: "1.5k orders this week" },
-  ]
+  const [selectedRole, setSelectedRole] = useState<UserRole>("customer")
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-gray-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-20">
             <div className="flex items-center space-x-3">
-              <SafeImage src="/images/foodee-logo.png" alt="FoodeeHub" width={120} height={40} className="h-8 w-auto" />
+              <SafeImage
+                src="/FoodeeHub_Logo-removebg.png"
+                alt="FoodeeHub"
+                width={140}
+                height={50}
+                className="h-12 w-auto mx-auto"
+              />
             </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" asChild>
-                <Link href="/vendor/login">Vendor Login</Link>
-              </Button>
-              <Button variant="ghost" asChild>
+            <div className="flex items-center space-x-3">
+              {/* Role Selector Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex items-center space-x-2 border-2 border-gray-200 hover:border-orange-500 transition-colors"
+                  >
+                    {selectedRole === "customer" ? <User className="h-4 w-4" /> : <Store className="h-4 w-4" />}
+                    <span className="capitalize">{selectedRole}</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem
+                    onClick={() => setSelectedRole("customer")}
+                    className={`flex items-center space-x-2 ${selectedRole === "customer" ? "bg-orange-50 text-orange-600" : ""}`}
+                  >
+                    <User className="h-4 w-4" />
+                    <span>Customer</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setSelectedRole("vendor")}
+                    className={`flex items-center space-x-2 ${selectedRole === "vendor" ? "bg-green-50 text-green-600" : ""}`}
+                  >
+                    <Store className="h-4 w-4" />
+                    <span>Vendor</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Button variant="ghost" className="text-gray-600 hover:text-orange-600 transition-colors" asChild>
                 <Link href="/admin">Admin</Link>
               </Button>
-              <Button asChild>
-                <Link href="/auth/login">Sign In</Link>
+              <Button
+                className={`shadow-lg hover:shadow-xl transition-all duration-300 ${
+                  selectedRole === "customer"
+                    ? "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                    : "bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
+                } text-white`}
+                asChild
+              >
+                <Link href={`/auth/login?role=${selectedRole}`}>Sign In</Link>
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">Order from Multiple Vendors</h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90">Smart pairing • Group ordering • Split billing</p>
-          <div className="max-w-md mx-auto">
-            <div className="flex">
-              <Input placeholder="Enter your delivery address" className="rounded-r-none bg-white text-gray-900" />
-              <Button className="rounded-l-none bg-orange-600 hover:bg-orange-700">
-                <MapPin className="h-4 w-4" />
+      {/* Dynamic Content Based on Role */}
+      {selectedRole === "customer" ? renderCustomerInterface() : renderVendorInterface()}
+
+      {/* CTA Section - Common for both roles */}
+      {selectedRole === "customer" && (
+        <section className="py-24 bg-gradient-to-r from-orange-500 to-red-500 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width=%2260%22%20height=%2260%22%20viewBox=%220%200%2060%2060%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill=%22none%22%20fillRule=%22evenodd%22%3E%3Cg%20fill=%22%23ffffff%22%20fillOpacity=%220.1%22%3E%3Ccircle%20cx=%2230%22%20cy=%2230%22%20r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+
+          <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Experience the Future?</h2>
+            <p className="text-xl text-orange-100 mb-10 max-w-2xl mx-auto">
+              Join thousands of satisfied customers who are already enjoying multi-vendor ordering and group dining
+              experiences.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Button
+                size="lg"
+                className="bg-white text-orange-600 hover:bg-gray-50 px-10 py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 text-lg font-semibold"
+              >
+                Start Your First Order
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-2 border-white text-orange-600 hover:bg-gray-50 hover:text-orange-700 px-10 py-4 rounded-2xl text-lg font-semibold transition-all duration-300"
+              >
+                <Shield className="mr-2 h-5 w-5" />
+                Learn More
               </Button>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Popular Combos */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Popular Combos This Week</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {popularCombos.map((combo, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-xl font-semibold mb-2">{combo.combo}</h3>
-                  <p className="text-gray-600">{combo.orders}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Vendors */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Vendors</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredVendors.map((vendor) => (
-              <Card key={vendor.id} className="hover:shadow-lg transition-shadow">
-                <div className="relative">
-                  <SafeImage
-                    src={vendor.image || "/placeholder.svg"}
-                    alt={vendor.name}
-                    width={300}
-                    height={200}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                  />
-                  <Badge className="absolute top-2 right-2 bg-orange-500">Pairs with {vendor.pairableWith}</Badge>
-                </div>
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-semibold">{vendor.name}</h3>
-                    <div className="flex items-center">
-                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                      <span className="ml-1 text-sm">{vendor.rating}</span>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 text-sm mb-2">{vendor.category}</p>
-                  <p className="text-gray-500 text-sm">{vendor.deliveryTime}</p>
-                  <Button className="w-full mt-4 bg-orange-500 hover:bg-orange-600" asChild>
-                    <Link href={`/vendor/${vendor.id}`}>View Menu</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Why Choose FoodeeHub?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <ShoppingCart className="h-8 w-8 text-orange-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Multi-Vendor Cart</h3>
-              <p className="text-gray-600">
-                Order from multiple nearby vendors in one go. Smart pairing suggestions based on proximity.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-orange-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Group Ordering</h3>
-              <p className="text-gray-600">
-                Start group orders with friends. Everyone pays for their own items with real-time split billing.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-8 w-8 text-orange-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Smart Proximity</h3>
-              <p className="text-gray-600">
-                Only pair vendors within 300m of each other for faster delivery and fresher food.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 text-white py-16 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
+            <div className="md:col-span-2">
               <SafeImage
-                src="/images/foodee-logo.png"
+                src="/FoodeeHub_Logo-removebg.png"
                 alt="FoodeeHub"
-                width={120}
-                height={40}
-                className="h-8 w-auto mb-4 brightness-0 invert"
+                width={160}
+                height={50}
+                className="h-12 w-auto mb-6"
               />
-              <p className="text-gray-400">
-                The smart way to order from multiple vendors with group ordering and split billing.
+              <p className="text-gray-400 text-lg leading-relaxed max-w-md">
+                {selectedRole === "customer"
+                  ? "The smart way to order from multiple vendors with group ordering and split billing. Experience the future of food delivery."
+                  : "The platform that helps restaurants grow with smart vendor pairing, group orders, and powerful management tools."}
               </p>
+              <div className="flex space-x-4 mt-6">
+                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors cursor-pointer">
+                  <span className="text-sm font-bold">f</span>
+                </div>
+                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors cursor-pointer">
+                  <span className="text-sm font-bold">t</span>
+                </div>
+                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors cursor-pointer">
+                  <span className="text-sm font-bold">in</span>
+                </div>
+              </div>
             </div>
+
             <div>
-              <h4 className="font-semibold mb-4">For Customers</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="/how-it-works">How it Works</Link>
-                </li>
-                <li>
-                  <Link href="/group-ordering">Group Ordering</Link>
-                </li>
-                <li>
-                  <Link href="/support">Support</Link>
-                </li>
+              <h4 className="font-bold text-lg mb-6">
+                {selectedRole === "customer" ? "For Customers" : "For Vendors"}
+              </h4>
+              <ul className="space-y-4 text-gray-400">
+                {selectedRole === "customer" ? (
+                  <>
+                    <li>
+                      <Link href="/how-it-works" className="hover:text-orange-400 transition-colors">
+                        How it Works
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/group-ordering" className="hover:text-orange-400 transition-colors">
+                        Group Ordering
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/support" className="hover:text-orange-400 transition-colors">
+                        Support
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/pricing" className="hover:text-orange-400 transition-colors">
+                        Pricing
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <Link href="/vendor/signup" className="hover:text-green-400 transition-colors">
+                        Join as Vendor
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/vendor/dashboard" className="hover:text-green-400 transition-colors">
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/vendor/support" className="hover:text-green-400 transition-colors">
+                        Support
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/vendor/analytics" className="hover:text-green-400 transition-colors">
+                        Analytics
+                      </Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
+
             <div>
-              <h4 className="font-semibold mb-4">For Vendors</h4>
-              <ul className="space-y-2 text-gray-400">
+              <h4 className="font-bold text-lg mb-6">Company</h4>
+              <ul className="space-y-4 text-gray-400">
                 <li>
-                  <Link href="/vendor/signup">Join as Vendor</Link>
+                  <Link href="/about" className="hover:text-orange-400 transition-colors">
+                    About Us
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/vendor/login">Vendor Login</Link>
+                  <Link href="/careers" className="hover:text-orange-400 transition-colors">
+                    Careers
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/vendor/support">Vendor Support</Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="/about">About Us</Link>
+                  <Link href="/contact" className="hover:text-orange-400 transition-colors">
+                    Contact
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/careers">Careers</Link>
-                </li>
-                <li>
-                  <Link href="/contact">Contact</Link>
+                  <Link href="/api-docs" className="hover:text-orange-400 transition-colors">
+                    API Documentation
+                  </Link>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 FoodeeHub. All rights reserved.</p>
+
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 mb-4 md:mb-0">&copy; 2024 FoodeeHub. All rights reserved.</p>
+            <div className="flex space-x-6 text-gray-400 text-sm">
+              <Link href="/privacy" className="hover:text-orange-400 transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="hover:text-orange-400 transition-colors">
+                Terms of Service
+              </Link>
+              <Link href="/cookies" className="hover:text-orange-400 transition-colors">
+                Cookie Policy
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

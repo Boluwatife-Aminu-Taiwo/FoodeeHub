@@ -29,7 +29,7 @@ export default function VendorPage({ params }: { params: { id: string } }) {
     rating: 4.5,
     deliveryTime: "25-35 min",
     deliveryFee: 500,
-    image: "/placeholder.svg?height=200&width=400",
+    image: "/chickenrep.jpeg",
     description: "Delicious fried chicken and local favorites",
   }
 
@@ -40,7 +40,7 @@ export default function VendorPage({ params }: { params: { id: string } }) {
     rating: 4.3,
     deliveryTime: "20-30 min",
     distance: "250m away",
-    image: "/placeholder.svg?height=150&width=200",
+    image: "/cold-stone.jpeg",
   }
 
   const menuItems = [
@@ -49,7 +49,7 @@ export default function VendorPage({ params }: { params: { id: string } }) {
       name: "Refuel Max",
       description: "Chicken, rice, plantain, coleslaw",
       price: 3500,
-      image: "/placeholder.svg?height=100&width=100",
+      image: "/chickenrep.jpeg",
       category: "Meals",
     },
     {
@@ -57,7 +57,7 @@ export default function VendorPage({ params }: { params: { id: string } }) {
       name: "Chicken Royale",
       description: "Spicy fried chicken with sides",
       price: 2800,
-      image: "/placeholder.svg?height=100&width=100",
+      image: "/chickenrep.jpeg",
       category: "Meals",
     },
     {
@@ -65,7 +65,7 @@ export default function VendorPage({ params }: { params: { id: string } }) {
       name: "Jollof Rice",
       description: "Nigerian jollof rice with chicken",
       price: 2200,
-      image: "/placeholder.svg?height=100&width=100",
+      image: "/chickenrep.jpeg",
       category: "Rice",
     },
   ]
@@ -76,7 +76,7 @@ export default function VendorPage({ params }: { params: { id: string } }) {
       name: "Vanilla Ice Cream",
       description: "Premium vanilla ice cream",
       price: 1500,
-      image: "/placeholder.svg?height=100&width=100",
+      image: "/cold-stone.jpeg",
       category: "Ice Cream",
     },
     {
@@ -84,7 +84,7 @@ export default function VendorPage({ params }: { params: { id: string } }) {
       name: "Chocolate Sundae",
       description: "Rich chocolate sundae with toppings",
       price: 2000,
-      image: "/placeholder.svg?height=100&width=100",
+      image: "/cold-stone.jpeg",
       category: "Sundae",
     },
   ]
@@ -135,7 +135,7 @@ export default function VendorPage({ params }: { params: { id: string } }) {
                   <ArrowLeft className="h-5 w-5" />
                 </Link>
               </Button>
-              <SafeImage src="/images/foodee-logo.png" alt="FoodeeHub" width={100} height={32} className="h-6 w-auto" />
+              <SafeImage src="/FoodeeHub_Logo-removebg.png" alt="FoodeeHub" width={100} height={32} className="h-10 w-auto" />
             </div>
             <Button className="relative bg-orange-500 hover:bg-orange-600" asChild>
               <Link href="/cart">
