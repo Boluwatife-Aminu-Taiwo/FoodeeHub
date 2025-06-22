@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "FoodeeHub - Multi-Vendor Food Delivery",
   description: "Order from multiple nearby vendors with smart pairing and group ordering",
   icons: {
-    icon: "/images/foodee-icon.png",
+    icon: "FoodeeHub_icon-removebg.png",
   },
 }
 

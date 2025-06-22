@@ -1,7 +1,7 @@
 "use client"
 import type { LocationDropdownProps } from "@/types/location"
 import { useClickOutside } from "@/hooks/use-click-outside"
-import LocationItem from "./location-item"
+import LocationItem from "@/components/location/location-items"
 
 export default function LocationDropdown({
   isOpen,

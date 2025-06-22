@@ -68,9 +68,9 @@ export default function SignupPage() {
 
     // Redirect based on role
     if (activeRole === "vendor") {
-      window.location.href = "/vendor/onboarding"
+      window.location.href = "/vendor/dashboard"
     } else {
-      window.location.href = "/customer/welcome"
+      window.location.href = "/vendors"
     }
 
     setIsLoading(false)

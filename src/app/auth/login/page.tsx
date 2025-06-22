@@ -44,7 +44,7 @@ export default function LoginPage() {
     if (activeRole === "vendor") {
       window.location.href = "/vendor/dashboard"
     } else {
-      window.location.href = "/customer/dashboard"
+      window.location.href = "/vendors"
     }
 
     setIsLoading(false)

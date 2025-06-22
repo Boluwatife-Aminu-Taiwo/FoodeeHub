@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 
 interface AnimatedButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
-  variant?: "primary" | "secondary" | "outline" | "ghost"
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "green" | "ghostGreen"
   size?: "sm" | "md" | "lg"
   loading?: boolean
   icon?: ReactNode
@@ -30,6 +30,8 @@ export function AnimatedButton({
       "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white shadow-lg hover:shadow-xl",
     outline: "border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white bg-transparent",
     ghost: "text-gray-600 hover:text-orange-600 hover:bg-orange-50 bg-transparent",
+    green: "border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white bg-transparent",
+    ghostGreen: "text-gray-600 hover:text-green-600 hover:bg-green-50 bg-transparent",
   }
 
   const sizes = {
